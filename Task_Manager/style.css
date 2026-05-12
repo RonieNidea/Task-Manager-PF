@@ -1,10 +1,9 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: #f4f6f9;
-  margin: 0;
-  padding: 30px;
   display: flex;
   justify-content: center;
+  padding: 30px;
 }
 
 .container {
@@ -17,52 +16,37 @@ body {
 
 h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
 }
 
 form {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
-input,
-select,
-button {
+input, select, button {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-input {
-  flex: 1;
-}
-
 button {
-  border: none;
-  background: #dc3545;
+  background: #007bff;
   color: white;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-#searchInput,
-#filterCategory {
-  width: 100%;
-  margin-bottom: 10px;
 }
 
 #counter {
+  margin: 10px 0;
   font-weight: bold;
-  color: #444;
-  margin-bottom: 15px;
 }
 
+#loading {
+  display: none;
+  color: #007bff;
+}
+
+/* TASK LIST */
 ul {
   list-style: none;
   padding: 0;
@@ -70,39 +54,50 @@ ul {
 
 li {
   background: #f8f9fa;
-  padding: 12px;
   margin-bottom: 10px;
+  padding: 10px;
   border-radius: 8px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  transition: 0.3s;
 }
 
-li:hover {
-  transform: scale(1.02);
-}
-
+/* TASK TEXT */
 span {
   cursor: pointer;
 }
 
 /* COMPLETED TASK */
 .completed {
-  background: #28a745;
+  background: green;
   color: white;
   text-decoration: line-through;
   padding: 4px 8px;
   border-radius: 5px;
 }
 
-/* DELETE BUTTON */
-.deleteBtn {
-  background: #dc3545;
+/* BUTTON GROUP (EDIT + DELETE SIDE BY SIDE) */
+.btnGroup {
+  display: flex;
+  gap: 5px;
 }
 
-.deleteBtn:hover {
-  background: #a71d2a;
+/* BUTTON COLORS */
+.editBtn {
+  background: orange;
 }
+
+.deleteBtn {
+  background: red;
+}
+
+/* NOTIFICATIONS */
+.notification {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+.success { background: green; }
+.error { background: red; }
