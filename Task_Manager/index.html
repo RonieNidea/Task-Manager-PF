@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager</title>
+  <title>Advanced Task Manager</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,30 +13,33 @@
   <h1>Task Manager</h1>
 
   <form id="taskForm">
-    <input type="text" id="taskInput" placeholder="Enter task..." required>
+    <input type="text"
+      id="taskInput" placeholder="Enter task" required>
 
     <select id="category">
       <option value="Work">Work</option>
       <option value="Personal">Personal</option>
+      <option value="School">School</option>
     </select>
 
     <button type="submit">Add Task</button>
   </form>
 
-  <input type="text" id="searchInput" placeholder="Search task...">
+  <input
+    type="text" id="searchInput" placeholder="Search task">
 
   <select id="filterCategory">
     <option value="all">All Categories</option>
     <option value="Work">Work</option>
     <option value="Personal">Personal</option>
+    <option value="School">School</option>
   </select>
 
+  <button id="loadCategoriesBtn">API Category</button>
+
   <p id="counter"></p>
-
   <p id="loading">Loading...</p>
-
   <div id="notifications"></div>
-
   <ul id="taskList"></ul>
 
 </div>
