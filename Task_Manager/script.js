@@ -10,20 +10,22 @@ const counter = document.getElementById("counter");
 const loading = document.getElementById("loading");
 const notifications = document.getElementById("notifications");
 
+
 // WEEK 3 — APPLICATION STATE
 let tasks = [];
 
-// WEEK 5 — DEBOUNCE
+// WEEK 5 — DEBOUNCE FUNCTION
 function debounce(func, delay) {
   let timer;
 
   return function () {
     clearTimeout(timer);
+
     timer = setTimeout(func, delay);
   };
 }
 
-// WEEK 5 — NOTIFICATIONS
+// WEEK 5 — NOTIFICATION FUNCTION
 function showNotification(message, type) {
   const div = document.createElement("div");
 
@@ -32,10 +34,12 @@ function showNotification(message, type) {
 
   notifications.appendChild(div);
 
-  setTimeout(() => div.remove(), 2000);
+  setTimeout(() => {
+    div.remove();
+  }, 2000);
 }
 
-// WEEK 5 — LOADING
+// WEEK 5 — LOADING FUNCTIONS
 function showLoading() {
   loading.style.display = "block";
 }
@@ -47,9 +51,7 @@ function hideLoading() {
 // WEEK 6 — FETCH API
 async function loadCategories() {
   try {
-    const response = await fetch(
-      "https://jsonplaceholder.typicode.com/posts"
-    );
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
 
     const data = await response.json();
 
@@ -67,39 +69,33 @@ function renderTasks() {
 
   list.innerHTML = "";
 
-  const searchValue =
-    searchInput.value.toLowerCase();
+  const searchValue = searchInput.value.toLowerCase();
+  const selectedCategory = filterCategory.value;
 
-  const selectedCategory =
-    filterCategory.value;
-
-  const filteredTasks = tasks.filter(task =>
-    task.text.toLowerCase().includes(searchValue) &&
-    (
-      selectedCategory === "all" ||
-      task.category === selectedCategory
-    )
-  );
+  const filteredTasks = tasks.filter(task => {
+    return (
+      task.text.toLowerCase().includes(searchValue) &&
+      (
+        selectedCategory === "all" ||
+        task.category === selectedCategory
+      )
+    );
+  });
 
   filteredTasks.forEach(task => {
 
-    // TASK ITEM
+    // CREATE ELEMENTS
     const li = document.createElement("li");
-
-    // TASK TEXT
     const span = document.createElement("span");
 
-    span.textContent =
-      `${task.text} [${task.category}]`;
+    span.textContent = `${task.text} [${task.category}]`;
 
+    // COMPLETE TASK
     if (task.completed) {
       span.classList.add("completed");
     }
 
-    // COMPLETE TASK
-    span.addEventListener("click", function (event) {
-
-      console.log(event.target);
+    span.addEventListener("click", () => {
 
       task.completed = !task.completed;
 
@@ -111,15 +107,13 @@ function renderTasks() {
       renderTasks();
     });
 
-    // TIMER DISPLAY
+    // WEEK 4 — TIMER DISPLAY
     const timer = document.createElement("p");
+    timer.textContent = `${task.time}s`;
 
-    timer.textContent =
-      `${task.time}s`;
-
-    // TIMER FUNCTIONS
     let interval;
 
+    // START TIMER
     function startTimer() {
 
       if (interval) return;
@@ -130,8 +124,7 @@ function renderTasks() {
 
           task.time--;
 
-          timer.textContent =
-            `${task.time}s`;
+          timer.textContent = `${task.time}s`;
 
         } else {
 
@@ -146,11 +139,13 @@ function renderTasks() {
       }, 1000);
     }
 
+    // PAUSE TIMER
     function pauseTimer() {
       clearInterval(interval);
       interval = null;
     }
 
+    // RESET TIMER
     function resetTimer() {
 
       clearInterval(interval);
@@ -159,14 +154,12 @@ function renderTasks() {
 
       task.time = 100;
 
-      timer.textContent =
-        `${task.time}s`;
+      timer.textContent = `${task.time}s`;
     }
 
+    // WEEK 4 — BUTTONS
     // START BUTTON
-    const startBtn =
-      document.createElement("button");
-
+    const startBtn = document.createElement("button");
     startBtn.textContent = "Start";
 
     startBtn.addEventListener(
@@ -175,9 +168,7 @@ function renderTasks() {
     );
 
     // PAUSE BUTTON
-    const pauseBtn =
-      document.createElement("button");
-
+    const pauseBtn = document.createElement("button");
     pauseBtn.textContent = "Pause";
 
     pauseBtn.addEventListener(
@@ -186,9 +177,7 @@ function renderTasks() {
     );
 
     // RESET BUTTON
-    const resetBtn =
-      document.createElement("button");
-
+    const resetBtn = document.createElement("button");
     resetBtn.textContent = "Reset";
 
     resetBtn.addEventListener(
@@ -197,69 +186,53 @@ function renderTasks() {
     );
 
     // EDIT BUTTON
-    const editBtn =
-      document.createElement("button");
+    const editBtn = document.createElement("button");
 
     editBtn.textContent = "Edit";
 
     editBtn.classList.add("editBtn");
 
-    editBtn.addEventListener(
-      "click",
-      function () {
+    editBtn.addEventListener("click", () => {
 
-        const newText = prompt(
-          "Edit task:",
-          task.text
+      const newText = prompt(
+        "Edit task:",
+        task.text
+      );
+
+      if (newText && newText.trim() !== "") {
+
+        task.text = newText;
+
+        showNotification(
+          "Task Edited",
+          "success"
         );
 
-        if (
-          newText &&
-          newText.trim() !== ""
-        ) {
-
-          task.text = newText;
-
-          showNotification(
-            "Task Edited",
-            "success"
-          );
-
-          renderTasks();
-        }
+        renderTasks();
       }
-    );
+    });
 
     // DELETE BUTTON
-    const deleteBtn =
-      document.createElement("button");
+    const deleteBtn = document.createElement("button");
 
     deleteBtn.textContent = "Delete";
 
     deleteBtn.classList.add("deleteBtn");
 
-    deleteBtn.addEventListener(
-      "click",
-      function (event) {
+    deleteBtn.addEventListener("click", () => {
 
-        console.log(event.target);
+      tasks = tasks.filter(t => t !== task);
 
-        tasks = tasks.filter(
-          t => t !== task
-        );
+      showNotification(
+        "Task Deleted",
+        "error"
+      );
 
-        showNotification(
-          "Task Deleted",
-          "error"
-        );
+      renderTasks();
+    });
 
-        renderTasks();
-      }
-    );
-
-    // BUTTON GROUP
-    const btnGroup =
-      document.createElement("div");
+    // WEEK 4 BUTTON GROUP
+    const btnGroup = document.createElement("div");
 
     btnGroup.classList.add("btnGroup");
 
@@ -271,7 +244,7 @@ function renderTasks() {
       resetBtn
     );
 
-    // APPEND
+    // APPEND ELEMENTS
     li.append(
       span,
       timer,
@@ -284,80 +257,74 @@ function renderTasks() {
   updateCounter();
 }
 
-// WEEK 3 — COUNTER
+// WEEK 3 UPDATE COUNTER
 function updateCounter() {
 
   const total = tasks.length;
 
-  const completed =
-    tasks.filter(
-      task => task.completed
-    ).length;
+  const completed = tasks.filter(task => {
+    return task.completed;
+  }).length;
 
-  const pending =
-    total - completed;
+  const pending = total - completed;
 
   counter.textContent =
     `Total: ${total} | Completed: ${completed} | Pending: ${pending}`;
 }
 
-// WEEK 3 + 5 — ADD TASK
-form.addEventListener(
-  "submit",
-  async function (e) {
+// WEEK 3 and WEEK 5 ADD TASK
+form.addEventListener("submit", async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    const taskText =
-      input.value.trim();
+  const taskText = input.value.trim();
 
-    if (!taskText) return;
+  if (!taskText) return;
 
-    try {
+  try {
 
-      showLoading();
+    showLoading();
 
-      await new Promise(resolve =>
-        setTimeout(resolve, 500)
-      );
+    await new Promise(resolve => {
+      setTimeout(resolve, 500);
+    });
 
-      tasks.push({
-        text: taskText,
-        category: category.value,
-        completed: false,
-        time: 100
-      });
+    tasks.push({
+      text: taskText,
+      category: category.value,
+      completed: false,
+      time: 100
+    });
 
-      showNotification(
-        "Task Added",
-        "success"
-      );
+    showNotification(
+      "Task Added",
+      "success"
+    );
 
-      input.value = "";
+    input.value = "";
 
-      renderTasks();
+    renderTasks();
 
-    } catch (error) {
+  } catch (error) {
 
-      showNotification(
-        "Something went wrong",
-        "error"
-      );
+    showNotification(
+      "Something went wrong",
+      "error"
+    );
 
-    } finally {
+  } finally {
 
-      hideLoading();
-    }
+    hideLoading();
   }
-);
+});
 
-// WEEK 4 — FILTER
+// WEEK 4 — FILTER TASKS
 filterCategory.addEventListener(
   "change",
   renderTasks
 );
 
-// WEEK 5 — SEARCH
+// WEEK 5 — SEARCH TASKS
 searchInput.addEventListener(
   "input",
   debounce(renderTasks, 300)
